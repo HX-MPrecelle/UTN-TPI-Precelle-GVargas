@@ -2,4 +2,4 @@
 
 ## Trabajo integrador 
 
-### *Integrantes:* Precelle, Martín Nicolás y Marcos García Vargas
+### *Integrantes:* Precelle, Martín Nicolás y García Vargas, Marcos
