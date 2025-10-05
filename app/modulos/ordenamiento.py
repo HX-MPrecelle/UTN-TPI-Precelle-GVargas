@@ -5,7 +5,7 @@ Este módulo contiene funciones para ordenar países según diferentes criterios
 usando algoritmos de ordenamiento implementados desde cero.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 
 def ordenar_por_nombre(paises: List[Dict[str, Any]], descendente: bool = False) -> List[Dict[str, Any]]:
@@ -160,38 +160,3 @@ def ordenar_personalizado(paises: List[Dict[str, Any]], criterio: str,
     return criterios_validos[criterio](paises, descendente)
 
 
-def obtener_top_paises(paises: List[Dict[str, Any]], criterio: str, 
-                      cantidad: int, descendente: bool = True) -> List[Dict[str, Any]]:
-    """
-    Obtiene los países top según un criterio.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        cantidad (int): Cantidad de países a retornar
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países top
-    """
-    if not paises or cantidad <= 0:
-        return []
-    
-    paises_ordenados = ordenar_personalizado(paises, criterio, descendente)
-    return paises_ordenados[:cantidad]
-
-
-def obtener_bottom_paises(paises: List[Dict[str, Any]], criterio: str, 
-                         cantidad: int) -> List[Dict[str, Any]]:
-    """
-    Obtiene los países bottom según un criterio.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        cantidad (int): Cantidad de países a retornar
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países bottom
-    """
-    return obtener_top_paises(paises, criterio, cantidad, descendente=False)

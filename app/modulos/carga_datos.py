@@ -6,7 +6,7 @@ Incluye funciones para validar el formato de los datos y manejar errores.
 """
 import csv
 import os
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 def cargar_datos_csv(ruta_archivo: str) -> List[Dict[str, Any]]:
     """
@@ -136,7 +136,6 @@ def verificar_integridad_datos(paises: List[Dict[str, Any]]) -> bool:
     
     print("✓ Integridad de datos verificada correctamente")
     return True
-
 
 
 

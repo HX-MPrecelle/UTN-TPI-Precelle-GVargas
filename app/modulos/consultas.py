@@ -163,7 +163,6 @@ def buscar_paises_multiples_criterios(paises: List[Dict[str, Any]],
     return resultados
 
 
-
 def obtener_continentes_disponibles(paises: List[Dict[str, Any]]) -> List[str]:
     """
     Obtiene la lista de continentes disponibles en los datos.

@@ -5,6 +5,7 @@ Este módulo contiene funciones para validar entradas del usuario,
 filtrar datos y manejar errores de forma robusta.
 """
 
+import re
 from typing import Optional
 
 
@@ -39,7 +40,6 @@ def validar_entrada_numero(entrada: str, min_valor: Optional[int] = None,
         print("❌ Por favor, ingrese un número entero válido")
         return None
 
-
 def normalizar_texto_busqueda(texto: str) -> str:
     """
     Normaliza texto para búsquedas (minúsculas, sin acentos).
@@ -64,7 +64,6 @@ def normalizar_texto_busqueda(texto: str) -> str:
     
     return texto
 
-
 def formatear_numero(numero: int) -> str:
     """
     Formatea un número para mostrarlo de manera legible.
@@ -77,11 +76,9 @@ def formatear_numero(numero: int) -> str:
     """
     return f"{numero:,}".replace(",", ".")
 
-
 def pausar_ejecucion():
     """Pausa la ejecución hasta que el usuario presione Enter."""
     input("\n⏸️  Presione Enter para continuar...")
-
 
 def mostrar_separador(caracter: str = "=", longitud: int = 50):
     """

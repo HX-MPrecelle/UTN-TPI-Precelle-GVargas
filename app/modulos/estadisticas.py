@@ -6,7 +6,6 @@ y generar reportes sobre los datos de países.
 """
 
 from typing import List, Dict, Any
-from collections import defaultdict
 import math
 
 
@@ -89,29 +88,85 @@ def calcular_estadisticas_continente(paises: List[Dict[str, Any]], continente: s
     return calcular_estadisticas_generales(paises_continente)
 
 
-def calcular_estadisticas_por_continente(paises: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+def analizar_distribucion_poblacion(paises: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Calcula estadísticas agrupadas por continente.
+    Analiza la distribución de población entre los países.
     
     Args:
         paises (List[Dict[str, Any]]): Lista de países
         
     Returns:
-        Dict[str, Dict[str, Any]]: Diccionario con estadísticas por continente
+        Dict[str, Any]: Análisis de distribución de población
     """
     if not paises:
         return {}
     
-    # Agrupar países por continente
-    paises_por_continente = defaultdict(list)
-    for pais in paises:
-        paises_por_continente[pais['continente']].append(pais)
+    poblaciones = [pais['poblacion'] for pais in paises]
+    poblaciones_ordenadas = sorted(poblaciones)
+    n = len(poblaciones_ordenadas)
     
-    estadisticas_continentes = {}
+    # Calcular percentil 90 (simplificado)
+    posicion_90 = int(0.9 * (n - 1))
+    percentil_90 = poblaciones_ordenadas[posicion_90] if posicion_90 < n else poblaciones_ordenadas[-1]
     
-    for continente, paises_continente in paises_por_continente.items():
-        estadisticas = calcular_estadisticas_generales(paises_continente)
-        estadisticas_continentes[continente] = estadisticas
+    # Calcular mediana (percentil 50)
+    if n % 2 == 0:
+        mediana = (poblaciones_ordenadas[n // 2 - 1] + poblaciones_ordenadas[n // 2]) / 2
+    else:
+        mediana = poblaciones_ordenadas[n // 2]
     
-    return estadisticas_continentes
+    # Clasificar países por tamaño poblacional
+    paises_grandes = [p for p in paises if p['poblacion'] >= percentil_90]
+    paises_pequeños = [p for p in paises if p['poblacion'] < mediana]
+    
+    return {
+        'percentil_90': percentil_90,
+        'mediana': mediana,
+        'paises_grandes': len(paises_grandes),
+        'paises_pequeños': len(paises_pequeños),
+        'lista_grandes': paises_grandes[:10]  # Top 10
+    }
+
+
+def calcular_correlacion_poblacion_superficie(paises: List[Dict[str, Any]]) -> float:
+    """
+    Calcula la correlación entre población y superficie.
+    
+    Args:
+        paises (List[Dict[str, Any]]): Lista de países
+        
+    Returns:
+        float: Coeficiente de correlación de Pearson
+    """
+    if len(paises) < 2:
+        return 0
+    
+    poblaciones = [pais['poblacion'] for pais in paises]
+    superficies = [pais['superficie'] for pais in paises]
+    
+    n = len(poblaciones)
+    
+    # Calcular medias
+    media_poblacion = sum(poblaciones) / n
+    media_superficie = sum(superficies) / n
+    
+    # Calcular covarianza
+    covarianza = sum((p - media_poblacion) * (s - media_superficie) 
+                    for p, s in zip(poblaciones, superficies)) / n
+    
+    # Calcular desviaciones estándar
+    var_poblacion = sum((p - media_poblacion) ** 2 for p in poblaciones) / n
+    var_superficie = sum((s - media_superficie) ** 2 for s in superficies) / n
+    
+    desv_poblacion = math.sqrt(var_poblacion)
+    desv_superficie = math.sqrt(var_superficie)
+    
+    # Calcular correlación
+    if desv_poblacion == 0 or desv_superficie == 0:
+        return 0
+    
+    correlacion = covarianza / (desv_poblacion * desv_superficie)
+    return round(correlacion, 4)
+
+
 

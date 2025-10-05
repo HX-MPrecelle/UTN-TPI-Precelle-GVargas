@@ -224,9 +224,12 @@ def mostrar_distribucion_poblacion(distribucion: Dict[str, Any]):
     print("\n📊 DISTRIBUCIÓN DE POBLACIÓN")
     mostrar_separador("=", 50)
     
+    print(f"📈 Distribución de población:")
+    print(f"   Percentil 90: {formatear_numero(distribucion['percentil_90'])} habitantes")
+    print(f"   Mediana: {formatear_numero(distribucion['mediana'])} habitantes")
+    
     print(f"\n📊 Clasificación por tamaño:")
     print(f"   🌟 Países grandes (top 10%): {distribucion['paises_grandes']} países")
-    print(f"   📊 Países medianos (50%-90%): {distribucion['paises_medianos']} países")
     print(f"   📉 Países pequeños (bottom 50%): {distribucion['paises_pequeños']} países")
     
     # Mostrar algunos ejemplos
@@ -234,6 +237,33 @@ def mostrar_distribucion_poblacion(distribucion: Dict[str, Any]):
         print(f"\n🏆 Top 5 países más poblados:")
         for i, pais in enumerate(distribucion['lista_grandes'][:5], 1):
             print(f"   {i}. {pais['nombre']}: {formatear_numero(pais['poblacion'])} habitantes")
+
+
+def mostrar_correlacion(correlacion: float):
+    """
+    Muestra la correlación entre población y superficie.
+    
+    Args:
+        correlacion (float): Coeficiente de correlación
+    """
+    print(f"\n📊 CORRELACIÓN POBLACIÓN-SUPERFICIE")
+    mostrar_separador("-", 40)
+    
+    print(f"🔗 Coeficiente de correlación: {correlacion}")
+    
+    if correlacion > 0.7:
+        interpretacion = "Correlación fuerte positiva"
+    elif correlacion > 0.3:
+        interpretacion = "Correlación moderada positiva"
+    elif correlacion > -0.3:
+        interpretacion = "Correlación débil o nula"
+    elif correlacion > -0.7:
+        interpretacion = "Correlación moderada negativa"
+    else:
+        interpretacion = "Correlación fuerte negativa"
+    
+    print(f"📝 Interpretación: {interpretacion}")
+
 
 
 def exportar_a_archivo(paises: List[Dict[str, Any]], nombre_archivo: str, 
