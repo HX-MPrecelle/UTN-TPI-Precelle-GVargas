@@ -116,31 +116,6 @@ def filtrar_por_rango_superficie(paises: List[Dict[str, Any]],
     return resultados
 
 
-def filtrar_por_rango_densidad(paises: List[Dict[str, Any]], 
-                              densidad_min: float, densidad_max: float) -> List[Dict[str, Any]]:
-    """
-    Filtra países por rango de densidad poblacional.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        densidad_min (float): Densidad mínima
-        densidad_max (float): Densidad máxima
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países en el rango
-    """
-    if not paises:
-        return []
-    
-    resultados = []
-    for pais in paises:
-        densidad = pais['densidad']
-        if densidad_min <= densidad <= densidad_max:
-            resultados.append(pais)
-    
-    return resultados
-
-
 def buscar_paises_multiples_criterios(paises: List[Dict[str, Any]], 
                                      continente: Optional[str] = None,
                                      poblacion_min: Optional[int] = None,
@@ -186,27 +161,6 @@ def buscar_paises_multiples_criterios(paises: List[Dict[str, Any]],
         resultados = buscar_pais_por_nombre(resultados, nombre_contiene, busqueda_exacta=False)
     
     return resultados
-
-
-def obtener_paises_por_continente(paises: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
-    """
-    Agrupa países por continente.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        
-    Returns:
-        Dict[str, List[Dict[str, Any]]]: Diccionario con países agrupados por continente
-    """
-    paises_por_continente = {}
-    
-    for pais in paises:
-        continente = pais['continente']
-        if continente not in paises_por_continente:
-            paises_por_continente[continente] = []
-        paises_por_continente[continente].append(pais)
-    
-    return paises_por_continente
 
 
 def obtener_continentes_disponibles(paises: List[Dict[str, Any]]) -> List[str]:
@@ -265,24 +219,4 @@ def buscar_paises_bottom(paises: List[Dict[str, Any]], criterio: str, cantidad: 
     return paises_ordenados[:cantidad]
 
 
-def contar_paises_por_criterio(paises: List[Dict[str, Any]], 
-                              continente: Optional[str] = None,
-                              poblacion_min: Optional[int] = None,
-                              poblacion_max: Optional[int] = None) -> int:
-    """
-    Cuenta países que cumplen ciertos criterios.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        continente (str, optional): Continente a contar
-        poblacion_min (int, optional): Población mínima
-        poblacion_max (int, optional): Población máxima
-        
-    Returns:
-        int: Cantidad de países que cumplen los criterios
-    """
-    paises_filtrados = buscar_paises_multiples_criterios(
-        paises, continente, poblacion_min, poblacion_max
-    )
-    return len(paises_filtrados)
 

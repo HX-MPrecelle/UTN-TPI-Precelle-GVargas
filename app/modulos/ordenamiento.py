@@ -5,7 +5,7 @@ Este módulo contiene funciones para ordenar países según diferentes criterios
 usando algoritmos de ordenamiento implementados desde cero.
 """
 
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 
 def ordenar_por_nombre(paises: List[Dict[str, Any]], descendente: bool = False) -> List[Dict[str, Any]]:
@@ -233,113 +233,4 @@ def ordenar_personalizado(paises: List[Dict[str, Any]], criterio: str,
     return criterios_validos[criterio](paises, descendente)
 
 
-def obtener_top_paises(paises: List[Dict[str, Any]], criterio: str, 
-                      cantidad: int, descendente: bool = True) -> List[Dict[str, Any]]:
-    """
-    Obtiene los países top según un criterio.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        cantidad (int): Cantidad de países a retornar
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países top
-    """
-    if not paises or cantidad <= 0:
-        return []
-    
-    paises_ordenados = ordenar_personalizado(paises, criterio, descendente)
-    return paises_ordenados[:cantidad]
-
-
-def obtener_bottom_paises(paises: List[Dict[str, Any]], criterio: str, 
-                         cantidad: int) -> List[Dict[str, Any]]:
-    """
-    Obtiene los países bottom según un criterio.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        cantidad (int): Cantidad de países a retornar
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países bottom
-    """
-    return obtener_top_paises(paises, criterio, cantidad, descendente=False)
-
-
-def ordenar_por_multiples_criterios(paises: List[Dict[str, Any]], 
-                                   criterios: List[tuple]) -> List[Dict[str, Any]]:
-    """
-    Ordena países por múltiples criterios en orden de prioridad.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterios (List[tuple]): Lista de tuplas (criterio, descendente)
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países ordenada
-    """
-    if not paises or not criterios:
-        return paises.copy()
-    
-    paises_ordenados = paises.copy()
-    
-    # Aplicar cada criterio en orden de prioridad (de menor a mayor prioridad)
-    for criterio, descendente in criterios:
-        paises_ordenados = ordenar_personalizado(paises_ordenados, criterio, descendente)
-    
-    return paises_ordenados
-
-
-def comparar_paises(pais1: Dict[str, Any], pais2: Dict[str, Any], 
-                   criterio: str) -> int:
-    """
-    Compara dos países según un criterio.
-    
-    Args:
-        pais1 (Dict[str, Any]): Primer país
-        pais2 (Dict[str, Any]): Segundo país
-        criterio (str): Criterio de comparación
-        
-    Returns:
-        int: -1 si pais1 < pais2, 0 si son iguales, 1 si pais1 > pais2
-    """
-    valor1 = pais1.get(criterio, 0)
-    valor2 = pais2.get(criterio, 0)
-    
-    if isinstance(valor1, str):
-        valor1 = valor1.lower()
-        valor2 = valor2.lower()
-    
-    if valor1 < valor2:
-        return -1
-    elif valor1 > valor2:
-        return 1
-    else:
-        return 0
-
-
-def obtener_rango_paises(paises: List[Dict[str, Any]], criterio: str, 
-                        inicio: int, fin: int, descendente: bool = False) -> List[Dict[str, Any]]:
-    """
-    Obtiene un rango de países ordenados.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        inicio (int): Índice de inicio (inclusive)
-        fin (int): Índice de fin (exclusive)
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países en el rango especificado
-    """
-    if not paises or inicio < 0 or fin <= inicio:
-        return []
-    
-    paises_ordenados = ordenar_personalizado(paises, criterio, descendente)
-    return paises_ordenados[inicio:fin]
 

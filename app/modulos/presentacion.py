@@ -230,15 +230,12 @@ def mostrar_distribucion_poblacion(distribucion: Dict[str, Any]):
     print("\n📊 DISTRIBUCIÓN DE POBLACIÓN")
     mostrar_separador("=", 50)
     
-    cuartiles = distribucion['cuartiles']
-    print(f"📈 Cuartiles de población:")
-    print(f"   Q1 (25%): {formatear_numero(cuartiles['Q1'])} habitantes")
-    print(f"   Q2 (50%): {formatear_numero(cuartiles['Q2'])} habitantes")
-    print(f"   Q3 (75%): {formatear_numero(cuartiles['Q3'])} habitantes")
+    print(f"📈 Distribución de población:")
+    print(f"   Percentil 90: {formatear_numero(distribucion['percentil_90'])} habitantes")
+    print(f"   Mediana: {formatear_numero(distribucion['mediana'])} habitantes")
     
     print(f"\n📊 Clasificación por tamaño:")
     print(f"   🌟 Países grandes (top 10%): {distribucion['paises_grandes']} países")
-    print(f"   📊 Países medianos (50%-90%): {distribucion['paises_medianos']} países")
     print(f"   📉 Países pequeños (bottom 50%): {distribucion['paises_pequeños']} países")
     
     # Mostrar algunos ejemplos
@@ -273,54 +270,6 @@ def mostrar_correlacion(correlacion: float):
     
     print(f"📝 Interpretación: {interpretacion}")
 
-
-def formatear_tabla_resultados(paises: List[Dict[str, Any]], 
-                              columnas: List[str] = None) -> str:
-    """
-    Formatea una lista de países como tabla.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        columnas (List[str]): Columnas a mostrar
-        
-    Returns:
-        str: Tabla formateada
-    """
-    if not paises:
-        return "No hay datos para mostrar"
-    
-    if columnas is None:
-        columnas = ['nombre', 'continente', 'poblacion', 'superficie', 'densidad']
-    
-    # Calcular anchos de columna
-    anchos = {}
-    for columna in columnas:
-        anchos[columna] = max(
-            len(columna),
-            max(len(str(pais.get(columna, ''))) for pais in paises[:10])  # Solo primeros 10 para eficiencia
-        )
-    
-    # Crear tabla
-    tabla = []
-    
-    # Encabezado
-    fila_encabezado = " | ".join(columna.ljust(anchos[columna]) for columna in columnas)
-    tabla.append(fila_encabezado)
-    tabla.append("-" * len(fila_encabezado))
-    
-    # Filas de datos
-    for pais in paises[:20]:  # Limitar a 20 filas
-        fila = []
-        for columna in columnas:
-            valor = pais.get(columna, '')
-            if columna in ['poblacion', 'superficie']:
-                valor = formatear_numero(valor)
-            elif columna == 'densidad':
-                valor = f"{valor:.2f}"
-            fila.append(str(valor).ljust(anchos[columna]))
-        tabla.append(" | ".join(fila))
-    
-    return "\n".join(tabla)
 
 
 def exportar_a_archivo(paises: List[Dict[str, Any]], nombre_archivo: str, 

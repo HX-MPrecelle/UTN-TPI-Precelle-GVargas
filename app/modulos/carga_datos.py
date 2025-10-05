@@ -7,7 +7,7 @@ Incluye funciones para validar el formato de los datos y manejar errores.
 
 import csv
 import os
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 
 def cargar_datos_csv(ruta_archivo: str) -> List[Dict[str, Any]]:
@@ -145,29 +145,4 @@ def verificar_integridad_datos(paises: List[Dict[str, Any]]) -> bool:
     return True
 
 
-def obtener_estadisticas_carga(paises: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Obtiene estadísticas básicas sobre los datos cargados.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        
-    Returns:
-        Dict[str, Any]: Diccionario con estadísticas de carga
-    """
-    if not paises:
-        return {}
-    
-    continentes = set(pais['continente'] for pais in paises)
-    poblacion_total = sum(pais['poblacion'] for pais in paises)
-    superficie_total = sum(pais['superficie'] for pais in paises)
-    
-    return {
-        'total_paises': len(paises),
-        'continentes': list(continentes),
-        'total_continentes': len(continentes),
-        'poblacion_total': poblacion_total,
-        'superficie_total': superficie_total,
-        'densidad_promedio': round(poblacion_total / superficie_total, 2) if superficie_total > 0 else 0
-    }
 
