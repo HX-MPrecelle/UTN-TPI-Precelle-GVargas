@@ -3,9 +3,19 @@
 **Trabajo Práctico Integrador (TPI) - Programación I**  
 **Universidad Tecnológica Nacional (UTN)**
 
-## 👥 Integrantes
+## 👥 Integrantes, Profesores y Tutores
+
+### Integrantes
 - **Precelle, Martín Nicolás**
 - **García Vargas, Marcos**
+
+### Profesores
+- **Cintia Torres**
+- **Ariel Enferrel**
+
+### Tutores
+- **Matias Torres**
+- **Luciano Chiroli**
 
 ## 📋 Descripción del Proyecto
 
@@ -23,13 +33,13 @@ Este proyecto implementa un sistema completo de gestión de datos de países des
 
 ### Módulos Principales
 
-1. **`carga_datos.py`** - Carga y validación de datos CSV
-2. **`validacion.py`** - Validación de entradas del usuario
-3. **`consultas.py`** - Búsquedas y filtros de países
-4. **`ordenamiento.py`** - Algoritmos de ordenamiento implementados
-5. **`estadisticas.py`** - Cálculo de estadísticas descriptivas
-6. **`presentacion.py`** - Formateo y visualización de datos
-7. **`main.py`** - Aplicación principal y menú de usuario
+1. **`main.py`** - Aplicación principal con funciones
+2. **`carga_datos.py`** - Carga y validación de datos CSV
+3. **`validacion.py`** - Validación de entradas del usuario
+4. **`consultas.py`** - Búsquedas y filtros de países
+5. **`ordenamiento.py`** - Algoritmos de ordenamiento implementados
+6. **`estadisticas.py`** - Cálculo de estadísticas descriptivas
+7. **`presentacion.py`** - Formateo y visualización de datos
 
 ### Estructura de Datos
 
@@ -54,37 +64,34 @@ Cada país se representa como un diccionario con los siguientes campos:
 1. Clonar el repositorio:
 ```bash
 git clone <url-del-repositorio>
-cd tpi-precelle-vargas
+cd tpi-precelle-vargas/app
 ```
 
 2. Ejecutar la aplicación:
 ```bash
-python app/main.py
+python main.py
 ```
 
 ### Estructura de Archivos
 ```
-tpi-precelle-vargas/
-├── app/
-│   ├── main.py                 # Aplicación principal
-│   ├── modulos/
-│   │   ├── __init__.py
-│   │   ├── carga_datos.py      # Carga de datos CSV
-│   │   ├── validacion.py       # Validaciones
-│   │   ├── consultas.py        # Búsquedas y filtros
-│   │   ├── ordenamiento.py     # Algoritmos de ordenamiento
-│   │   ├── estadisticas.py     # Cálculos estadísticos
-│   │   └── presentacion.py     # Formateo y visualización
+app/
+├── main.py                 # Aplicación principal
 ├── data/
-│   └── paises.csv              # Dataset de países
-├── README.md
-└── flujo_operaciones.md
+│   └── paises.csv          # Dataset de países (175 países)
+└── modulos/
+    ├── __init__.py
+    ├── carga_datos.py      # Carga de datos CSV
+    ├── validacion.py       # Validaciones de entrada
+    ├── consultas.py        # Búsquedas y filtros
+    ├── ordenamiento.py     # Algoritmos de ordenamiento
+    ├── estadisticas.py     # Cálculos estadísticos
+    └── presentacion.py     # Formateo y visualización
 ```
 
 ## 🔧 Funcionalidades
 
 ### 1. Búsqueda y Filtrado
-- ✅ Búsqueda de países por nombre (coincidencia exacta o parcial)
+- ✅ Búsqueda de países por nombre (coincidencia parcial)
 - ✅ Filtrado por continente
 - ✅ Filtrado por rango de población
 - ✅ Filtrado por rango de superficie
@@ -99,7 +106,6 @@ tpi-precelle-vargas/
 ### 3. Estadísticas
 - ✅ Estadísticas generales (totales, promedios, extremos)
 - ✅ Estadísticas por continente
-- ✅ Análisis de distribución poblacional
 - ✅ Correlación entre población y superficie
 
 ### 4. Visualización
@@ -110,7 +116,7 @@ tpi-precelle-vargas/
 
 ## 📊 Dataset
 
-El archivo `data/paises.csv` contiene información de más de 180 países con los siguientes campos:
+El archivo `data/paises.csv` contiene información de **175 países** con los siguientes campos:
 - **nombre**: Nombre del país
 - **poblacion**: Población total en habitantes
 - **superficie**: Superficie en km²
@@ -149,7 +155,7 @@ Brasil,213993437,8515767,América
 #### Búsqueda por Nombre
 ```
 Ingrese el nombre del país: argentina
-✅ Búsqueda exitosa: países que contienen 'argentina'
+✅ Búsqueda exitosa: Países que contienen 'argentina'
 📊 Se encontraron 1 países
 ```
 
@@ -162,15 +168,15 @@ Ingrese el nombre del país: argentina
  4. Europa
  5. Oceanía
 
-Ingrese el nombre del continente: america
-✅ Búsqueda exitosa: países de América
+Seleccione un continente (1-5): 2
+✅ Búsqueda exitosa: Países de América
 ```
 
 #### Estadísticas Generales
 ```
 📊 ESTADÍSTICAS GENERALES
 ============================================================
-📈 Total de países: 185
+📈 Total de países: 175
 👥 Población mundial: 7,794,798,739 habitantes
 📏 Superficie mundial: 149,430,000 km²
 🏘️  Densidad promedio: 52.15 hab/km²
@@ -198,3 +204,24 @@ Ingrese el nombre del continente: america
 📏 Superficie total: 44,579,000 km²
 🏘️  Densidad promedio: 104.11 hab/km²
 ```
+
+## 🎯 Cumplimiento de Consignas TPI
+
+### ✅ Requerimientos Mínimos Cumplidos
+1. **Búsqueda por nombre** - Implementada con coincidencia parcial
+2. **Filtrado por continente** - Lista interactiva de continentes
+3. **Filtrado por rango de población** - Validación de rangos
+4. **Filtrado por rango de superficie** - Validación de rangos
+5. **Ordenamiento** - Por nombre, población, superficie (ascendente/descendente)
+6. **Estadísticas básicas** - Países extremos, promedios, totales
+7. **Validaciones** - Manejo robusto de errores
+8. **Archivos CSV** - Carga y procesamiento correcto
+
+### ✅ Estructuras de Datos Utilizadas
+- **Listas**: Para almacenar países y resultados
+- **Diccionarios**: Para representar cada país
+- **Funciones**: Modularización completa del código
+- **Condicionales**: Validaciones y flujo de control
+- **Bucles**: Procesamiento de datos y algoritmos de ordenamiento
+
+---
