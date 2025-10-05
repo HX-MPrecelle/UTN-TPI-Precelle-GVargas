@@ -132,78 +132,6 @@ def ordenar_por_superficie(paises: List[Dict[str, Any]], descendente: bool = Fal
     return paises_ordenados
 
 
-def ordenar_por_densidad(paises: List[Dict[str, Any]], descendente: bool = False) -> List[Dict[str, Any]]:
-    """
-    Ordena países por densidad poblacional usando ordenamiento rápido (quicksort).
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países ordenada
-    """
-    if not paises:
-        return []
-    
-    paises_ordenados = paises.copy()
-    _quicksort_densidad(paises_ordenados, 0, len(paises_ordenados) - 1, descendente)
-    return paises_ordenados
-
-
-def _quicksort_densidad(paises: List[Dict[str, Any]], inicio: int, fin: int, descendente: bool):
-    """
-    Función auxiliar para el ordenamiento rápido por densidad.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        inicio (int): Índice de inicio
-        fin (int): Índice de fin
-        descendente (bool): Si debe ordenar de forma descendente
-    """
-    if inicio < fin:
-        # Particionar el array
-        indice_pivote = _particionar_densidad(paises, inicio, fin, descendente)
-        
-        # Ordenar recursivamente las dos mitades
-        _quicksort_densidad(paises, inicio, indice_pivote - 1, descendente)
-        _quicksort_densidad(paises, indice_pivote + 1, fin, descendente)
-
-
-def _particionar_densidad(paises: List[Dict[str, Any]], inicio: int, fin: int, descendente: bool) -> int:
-    """
-    Función auxiliar para particionar en quicksort por densidad.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        inicio (int): Índice de inicio
-        fin (int): Índice de fin
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        int: Índice del pivote después de la partición
-    """
-    # Elegir el último elemento como pivote
-    pivote = paises[fin]['densidad']
-    i = inicio - 1
-    
-    for j in range(inicio, fin):
-        densidad_actual = paises[j]['densidad']
-        
-        debe_intercambiar = False
-        if descendente:
-            debe_intercambiar = densidad_actual > pivote
-        else:
-            debe_intercambiar = densidad_actual < pivote
-        
-        if debe_intercambiar:
-            i += 1
-            paises[i], paises[j] = paises[j], paises[i]
-    
-    # Colocar el pivote en su posición correcta
-    paises[i + 1], paises[fin] = paises[fin], paises[i + 1]
-    return i + 1
-
 
 def ordenar_personalizado(paises: List[Dict[str, Any]], criterio: str, 
                          descendente: bool = False) -> List[Dict[str, Any]]:
@@ -222,7 +150,6 @@ def ordenar_personalizado(paises: List[Dict[str, Any]], criterio: str,
         'nombre': ordenar_por_nombre,
         'poblacion': ordenar_por_poblacion,
         'superficie': ordenar_por_superficie,
-        'densidad': ordenar_por_densidad
     }
     
     if criterio not in criterios_validos:
@@ -268,78 +195,3 @@ def obtener_bottom_paises(paises: List[Dict[str, Any]], criterio: str,
         List[Dict[str, Any]]: Lista de países bottom
     """
     return obtener_top_paises(paises, criterio, cantidad, descendente=False)
-
-
-def ordenar_por_multiples_criterios(paises: List[Dict[str, Any]], 
-                                   criterios: List[tuple]) -> List[Dict[str, Any]]:
-    """
-    Ordena países por múltiples criterios en orden de prioridad.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterios (List[tuple]): Lista de tuplas (criterio, descendente)
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países ordenada
-    """
-    if not paises or not criterios:
-        return paises.copy()
-    
-    paises_ordenados = paises.copy()
-    
-    # Aplicar cada criterio en orden de prioridad (de menor a mayor prioridad)
-    for criterio, descendente in criterios:
-        paises_ordenados = ordenar_personalizado(paises_ordenados, criterio, descendente)
-    
-    return paises_ordenados
-
-
-def comparar_paises(pais1: Dict[str, Any], pais2: Dict[str, Any], 
-                   criterio: str) -> int:
-    """
-    Compara dos países según un criterio.
-    
-    Args:
-        pais1 (Dict[str, Any]): Primer país
-        pais2 (Dict[str, Any]): Segundo país
-        criterio (str): Criterio de comparación
-        
-    Returns:
-        int: -1 si pais1 < pais2, 0 si son iguales, 1 si pais1 > pais2
-    """
-    valor1 = pais1.get(criterio, 0)
-    valor2 = pais2.get(criterio, 0)
-    
-    if isinstance(valor1, str):
-        valor1 = valor1.lower()
-        valor2 = valor2.lower()
-    
-    if valor1 < valor2:
-        return -1
-    elif valor1 > valor2:
-        return 1
-    else:
-        return 0
-
-
-def obtener_rango_paises(paises: List[Dict[str, Any]], criterio: str, 
-                        inicio: int, fin: int, descendente: bool = False) -> List[Dict[str, Any]]:
-    """
-    Obtiene un rango de países ordenados.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        criterio (str): Criterio de ordenamiento
-        inicio (int): Índice de inicio (inclusive)
-        fin (int): Índice de fin (exclusive)
-        descendente (bool): Si debe ordenar de forma descendente
-        
-    Returns:
-        List[Dict[str, Any]]: Lista de países en el rango especificado
-    """
-    if not paises or inicio < 0 or fin <= inicio:
-        return []
-    
-    paises_ordenados = ordenar_personalizado(paises, criterio, descendente)
-    return paises_ordenados[inicio:fin]
-

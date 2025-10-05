@@ -25,7 +25,6 @@ def mostrar_pais(pais: Dict[str, Any], mostrar_indice: bool = False, indice: int
     # Formatear números
     poblacion = formatear_numero(pais['poblacion'])
     superficie = formatear_numero(pais['superficie'])
-    densidad = f"{pais['densidad']:.2f}"
     
     # Mostrar información
     if mostrar_indice:
@@ -35,7 +34,6 @@ def mostrar_pais(pais: Dict[str, Any], mostrar_indice: bool = False, indice: int
     print(f"   📍 Continente: {pais['continente']}")
     print(f"   👥 Población: {poblacion} habitantes")
     print(f"   📏 Superficie: {superficie} km²")
-    print(f"   🏘️  Densidad: {densidad} hab/km²")
     print()
 
 
@@ -88,7 +86,7 @@ def mostrar_estadisticas_generales(estadisticas: Dict[str, Any]):
     print(f"📈 Total de países: {estadisticas['total_paises']}")
     print(f"👥 Población mundial: {formatear_numero(estadisticas['poblacion_total'])} habitantes")
     print(f"📏 Superficie mundial: {formatear_numero(estadisticas['superficie_total'])} km²")
-    print(f"🏘️  Densidad promedio: {estadisticas['densidad_promedio']} hab/km²")
+
     
     print(f"\n📊 Población promedio: {formatear_numero(estadisticas['poblacion_promedio'])} habitantes")
     print(f"📊 Superficie promedio: {formatear_numero(estadisticas['superficie_promedio'])} km²")
@@ -123,7 +121,7 @@ def mostrar_estadisticas_continente(estadisticas: Dict[str, Any], continente: st
     print(f"📈 Total de países: {estadisticas['total_paises']}")
     print(f"👥 Población total: {formatear_numero(estadisticas['poblacion_total'])} habitantes")
     print(f"📏 Superficie total: {formatear_numero(estadisticas['superficie_total'])} km²")
-    print(f"🏘️  Densidad promedio: {estadisticas['densidad_promedio']} hab/km²")
+
     
     # Países extremos del continente
     print(f"\n🏆 EXTREMOS EN {continente.upper()}:")
@@ -162,8 +160,6 @@ def mostrar_submenu_ordenamiento():
     print("4. Población (Menor a mayor)")
     print("5. Superficie (Mayor a menor)")
     print("6. Superficie (Menor a mayor)")
-    print("7. Densidad (Mayor a menor)")
-    print("8. Densidad (Menor a mayor)")
     print("0. Volver al menú principal")
 
 
@@ -172,10 +168,8 @@ def mostrar_submenu_top():
     print("\n🏆 MOSTRAR TOP PAÍSES POR:")
     print("1. Población (Mayor a menor)")
     print("2. Superficie (Mayor a menor)")
-    print("3. Densidad (Mayor a menor)")
-    print("4. Población (Menor a mayor)")
-    print("5. Superficie (Menor a mayor)")
-    print("6. Densidad (Menor a mayor)")
+    print("3. Población (Menor a mayor)")
+    print("4. Superficie (Menor a mayor)")
     print("0. Volver al menú principal")
 
 
@@ -230,12 +224,6 @@ def mostrar_distribucion_poblacion(distribucion: Dict[str, Any]):
     print("\n📊 DISTRIBUCIÓN DE POBLACIÓN")
     mostrar_separador("=", 50)
     
-    cuartiles = distribucion['cuartiles']
-    print(f"📈 Cuartiles de población:")
-    print(f"   Q1 (25%): {formatear_numero(cuartiles['Q1'])} habitantes")
-    print(f"   Q2 (50%): {formatear_numero(cuartiles['Q2'])} habitantes")
-    print(f"   Q3 (75%): {formatear_numero(cuartiles['Q3'])} habitantes")
-    
     print(f"\n📊 Clasificación por tamaño:")
     print(f"   🌟 Países grandes (top 10%): {distribucion['paises_grandes']} países")
     print(f"   📊 Países medianos (50%-90%): {distribucion['paises_medianos']} países")
@@ -246,81 +234,6 @@ def mostrar_distribucion_poblacion(distribucion: Dict[str, Any]):
         print(f"\n🏆 Top 5 países más poblados:")
         for i, pais in enumerate(distribucion['lista_grandes'][:5], 1):
             print(f"   {i}. {pais['nombre']}: {formatear_numero(pais['poblacion'])} habitantes")
-
-
-def mostrar_correlacion(correlacion: float):
-    """
-    Muestra la correlación entre población y superficie.
-    
-    Args:
-        correlacion (float): Coeficiente de correlación
-    """
-    print(f"\n📊 CORRELACIÓN POBLACIÓN-SUPERFICIE")
-    mostrar_separador("-", 40)
-    
-    print(f"🔗 Coeficiente de correlación: {correlacion}")
-    
-    if correlacion > 0.7:
-        interpretacion = "Correlación fuerte positiva"
-    elif correlacion > 0.3:
-        interpretacion = "Correlación moderada positiva"
-    elif correlacion > -0.3:
-        interpretacion = "Correlación débil o nula"
-    elif correlacion > -0.7:
-        interpretacion = "Correlación moderada negativa"
-    else:
-        interpretacion = "Correlación fuerte negativa"
-    
-    print(f"📝 Interpretación: {interpretacion}")
-
-
-def formatear_tabla_resultados(paises: List[Dict[str, Any]], 
-                              columnas: List[str] = None) -> str:
-    """
-    Formatea una lista de países como tabla.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        columnas (List[str]): Columnas a mostrar
-        
-    Returns:
-        str: Tabla formateada
-    """
-    if not paises:
-        return "No hay datos para mostrar"
-    
-    if columnas is None:
-        columnas = ['nombre', 'continente', 'poblacion', 'superficie', 'densidad']
-    
-    # Calcular anchos de columna
-    anchos = {}
-    for columna in columnas:
-        anchos[columna] = max(
-            len(columna),
-            max(len(str(pais.get(columna, ''))) for pais in paises[:10])  # Solo primeros 10 para eficiencia
-        )
-    
-    # Crear tabla
-    tabla = []
-    
-    # Encabezado
-    fila_encabezado = " | ".join(columna.ljust(anchos[columna]) for columna in columnas)
-    tabla.append(fila_encabezado)
-    tabla.append("-" * len(fila_encabezado))
-    
-    # Filas de datos
-    for pais in paises[:20]:  # Limitar a 20 filas
-        fila = []
-        for columna in columnas:
-            valor = pais.get(columna, '')
-            if columna in ['poblacion', 'superficie']:
-                valor = formatear_numero(valor)
-            elif columna == 'densidad':
-                valor = f"{valor:.2f}"
-            fila.append(str(valor).ljust(anchos[columna]))
-        tabla.append(" | ".join(fila))
-    
-    return "\n".join(tabla)
 
 
 def exportar_a_archivo(paises: List[Dict[str, Any]], nombre_archivo: str, 
@@ -347,7 +260,6 @@ def exportar_a_archivo(paises: List[Dict[str, Any]], nombre_archivo: str,
                     archivo.write(f"   Continente: {pais['continente']}\n")
                     archivo.write(f"   Población: {formatear_numero(pais['poblacion'])} habitantes\n")
                     archivo.write(f"   Superficie: {formatear_numero(pais['superficie'])} km²\n")
-                    archivo.write(f"   Densidad: {pais['densidad']:.2f} hab/km²\n\n")
         
         elif formato == 'csv':
             import csv

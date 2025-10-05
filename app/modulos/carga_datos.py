@@ -4,11 +4,9 @@ Módulo de Carga de Datos
 Este módulo se encarga de cargar y procesar los datos desde archivos CSV.
 Incluye funciones para validar el formato de los datos y manejar errores.
 """
-
 import csv
 import os
 from typing import List, Dict, Any, Optional
-
 
 def cargar_datos_csv(ruta_archivo: str) -> List[Dict[str, Any]]:
     """
@@ -32,12 +30,10 @@ def cargar_datos_csv(ruta_archivo: str) -> List[Dict[str, Any]]:
     try:
         with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
             lector_csv = csv.DictReader(archivo)
-            
             # Verificar que las columnas requeridas estén presentes
             columnas_requeridas = ['nombre', 'poblacion', 'superficie', 'continente']
             if not all(col in lector_csv.fieldnames for col in columnas_requeridas):
                 raise ValueError("El archivo CSV no contiene todas las columnas requeridas")
-            
             for numero_fila, fila in enumerate(lector_csv, start=2):  # Empezamos en 2 porque la fila 1 es el header
                 try:
                     # Validar y convertir los datos
@@ -46,13 +42,11 @@ def cargar_datos_csv(ruta_archivo: str) -> List[Dict[str, Any]]:
                 except ValueError as e:
                     print(f"Advertencia: Error en fila {numero_fila}: {e}")
                     continue
-                    
     except Exception as e:
         raise ValueError(f"Error al leer el archivo CSV: {e}")
     
     if not paises:
         raise ValueError("No se pudieron cargar datos válidos del archivo")
-    
     print(f"✓ Datos cargados exitosamente: {len(paises)} países")
     return paises
 
@@ -103,7 +97,6 @@ def validar_fila_pais(fila: Dict[str, str], numero_fila: int) -> Dict[str, Any]:
         'poblacion': poblacion,
         'superficie': superficie,
         'continente': continente,
-        'densidad': round(poblacion / superficie, 2) if superficie > 0 else 0
     }
     
     return pais
@@ -124,7 +117,7 @@ def verificar_integridad_datos(paises: List[Dict[str, Any]]) -> bool:
         return False
     
     # Verificar que todos los países tengan los campos requeridos
-    campos_requeridos = ['nombre', 'poblacion', 'superficie', 'continente', 'densidad']
+    campos_requeridos = ['nombre', 'poblacion', 'superficie', 'continente']
     
     for i, pais in enumerate(paises):
         for campo in campos_requeridos:
@@ -145,29 +138,5 @@ def verificar_integridad_datos(paises: List[Dict[str, Any]]) -> bool:
     return True
 
 
-def obtener_estadisticas_carga(paises: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Obtiene estadísticas básicas sobre los datos cargados.
-    
-    Args:
-        paises (List[Dict[str, Any]]): Lista de países
-        
-    Returns:
-        Dict[str, Any]: Diccionario con estadísticas de carga
-    """
-    if not paises:
-        return {}
-    
-    continentes = set(pais['continente'] for pais in paises)
-    poblacion_total = sum(pais['poblacion'] for pais in paises)
-    superficie_total = sum(pais['superficie'] for pais in paises)
-    
-    return {
-        'total_paises': len(paises),
-        'continentes': list(continentes),
-        'total_continentes': len(continentes),
-        'poblacion_total': poblacion_total,
-        'superficie_total': superficie_total,
-        'densidad_promedio': round(poblacion_total / superficie_total, 2) if superficie_total > 0 else 0
-    }
+
 
