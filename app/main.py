@@ -26,7 +26,7 @@ if sys.platform == 'win32':
 sys.path.append(os.path.join(os.path.dirname(__file__), 'modulos'))
 
 # Importar todos los módulos
-from modulos.carga_datos import cargar_datos_csv, verificar_integridad_datos
+from modulos.carga_datos import cargar_datos_csv, verificar_integridad_datos, guardar_datos_csv
 from modulos.validacion import (
     validar_entrada_numero, 
     pausar_ejecucion, mostrar_separador
@@ -34,7 +34,7 @@ from modulos.validacion import (
 from modulos.consultas import (
     buscar_pais_por_nombre, filtrar_por_continente,
     filtrar_por_rango_poblacion, filtrar_por_rango_superficie,
-    obtener_continentes_disponibles
+    obtener_continentes_disponibles, buscar_paises_multiples_criterios
 )
 from modulos.ordenamiento import ordenar_personalizado
 from modulos.estadisticas import (
@@ -49,6 +49,7 @@ from modulos.presentacion import (
 # Variables globales
 paises = []
 resultados_actuales = []
+RUTA_DATOS = 'data/paises.csv'
 
 
 def inicializar_datos() -> bool:
@@ -65,9 +66,8 @@ def inicializar_datos() -> bool:
     
     try:
         # Cargar datos
-        ruta_datos = 'data/paises.csv'
-        print(f"📂 Cargando datos desde: {ruta_datos}")
-        paises = cargar_datos_csv(ruta_datos)
+        print(f"📂 Cargando datos desde: {RUTA_DATOS}")
+        paises = cargar_datos_csv(RUTA_DATOS)
         
         if not paises:
             print("❌ No se pudieron cargar los datos del archivo CSV")
@@ -504,7 +504,14 @@ def ejecutar_agregar_pais():
         # Agregar a la lista
         paises.append(nuevo_pais)
         
-        print(f"\n✅ País '{nombre}' agregado exitosamente")
+        # Guardar los datos en el CSV
+        if guardar_datos_csv(paises, RUTA_DATOS):
+            print(f"\n✅ País '{nombre}' agregado exitosamente")
+            print("💾 Datos guardados en el archivo CSV")
+        else:
+            print(f"\n✅ País '{nombre}' agregado exitosamente")
+            print("⚠️ Advertencia: No se pudieron guardar los datos en el archivo CSV")
+        
         mostrar_pais(nuevo_pais)
         
     except Exception as e:
@@ -561,7 +568,14 @@ def ejecutar_actualizar_pais():
             else:
                 print("⚠️ Superficie inválida, se mantiene el valor actual")
         
-        print(f"\n✅ País '{nombre}' actualizado exitosamente")
+        # Guardar los datos en el CSV
+        if guardar_datos_csv(paises, RUTA_DATOS):
+            print(f"\n✅ País '{nombre}' actualizado exitosamente")
+            print("💾 Datos guardados en el archivo CSV")
+        else:
+            print(f"\n✅ País '{nombre}' actualizado exitosamente")
+            print("⚠️ Advertencia: No se pudieron guardar los datos en el archivo CSV")
+        
         print("\n📋 Datos actualizados:")
         mostrar_pais(pais)
         

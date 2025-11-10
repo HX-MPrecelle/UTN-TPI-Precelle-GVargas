@@ -138,4 +138,49 @@ def verificar_integridad_datos(paises: List[Dict[str, Any]]) -> bool:
     return True
 
 
+def guardar_datos_csv(paises: List[Dict[str, Any]], ruta_archivo: str) -> bool:
+    """
+    Guarda los datos de países en un archivo CSV.
+    
+    Args:
+        paises (List[Dict[str, Any]]): Lista de países a guardar
+        ruta_archivo (str): Ruta al archivo CSV donde guardar los datos
+        
+    Returns:
+        bool: True si el guardado fue exitoso, False en caso contrario
+    """
+    if not paises:
+        print("⚠️ No hay datos para guardar")
+        return False
+    
+    try:
+        # Crear el directorio si no existe
+        directorio = os.path.dirname(ruta_archivo)
+        if directorio and not os.path.exists(directorio):
+            os.makedirs(directorio)
+        
+        # Escribir los datos al archivo CSV
+        with open(ruta_archivo, 'w', encoding='utf-8', newline='') as archivo:
+            columnas = ['nombre', 'poblacion', 'superficie', 'continente']
+            escritor_csv = csv.DictWriter(archivo, fieldnames=columnas)
+            
+            # Escribir el encabezado
+            escritor_csv.writeheader()
+            
+            # Escribir cada país
+            for pais in paises:
+                escritor_csv.writerow({
+                    'nombre': pais['nombre'],
+                    'poblacion': pais['poblacion'],
+                    'superficie': pais['superficie'],
+                    'continente': pais['continente']
+                })
+        
+        return True
+        
+    except Exception as e:
+        print(f"❌ Error al guardar los datos en el archivo CSV: {e}")
+        return False
+
+
 
